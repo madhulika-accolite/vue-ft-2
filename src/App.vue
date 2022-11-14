@@ -16,15 +16,11 @@ import Vue from "vue";
 import VueFusionCharts from "vue-fusioncharts";
 import FusionCharts from "fusioncharts";
 import TimeSeries from "fusioncharts/fusioncharts.timeseries";
+import data from './assets/data';
+import schema from './assets/schema'
 
 Vue.use(VueFusionCharts, FusionCharts, TimeSeries);
-const jsonify = (res) => res.json();
-const dataFetch = fetch(
-  "https://s3.eu-central-1.amazonaws.com/fusion.store/ft/data/column-chart-with-time-axis-data.json"
-).then(jsonify);
-const schemaFetch = fetch(
-  "https://s3.eu-central-1.amazonaws.com/fusion.store/ft/schema/column-chart-with-time-axis-schema.json"
-).then(jsonify);
+
 
 export default {
   name: "App",
@@ -58,15 +54,11 @@ export default {
     };
   },
   mounted: function () {
-    Promise.all([dataFetch, schemaFetch]).then((res) => {
-      const data = res[0];
-      const schema = res[1];
       const fusionTable = new FusionCharts.DataStore().createDataTable(
         data,
         schema
       );
       this.dataSource.data = fusionTable;
-    });
   },
 };
 </script>
